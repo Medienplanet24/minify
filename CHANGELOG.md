@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [4.0.2] - 2026-01-22
+
+- Add scssphp 2.x compatibility while maintaining backward compatibility, [#715]
+- Use `CompilationResult::getIncludedFiles()` for scssphp 2.x, fall back to `Compiler::getParsedFiles()` for scssphp 1.x
+
+[4.0.2]: https://github.com/mrclay/minify/compare/4.0.1...4.0.2
+[#715]: https://github.com/mrclay/minify/issues/715
+
 ## [4.0.1] - 2025-02-03
 
 - Recommend against use, [#711]
