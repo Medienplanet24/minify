@@ -151,18 +151,33 @@ class Minify_ScssCssSource extends Minify_Source
         // and will treat the @import line as css import
         $scss->setImportPaths(dirname($filename));
 
-        $css = $scss->compileString(file_get_contents($filename), $filename)->getCss();
+        $result = $scss->compileString(file_get_contents($filename), $filename);
+        $css = $result->getCss();
         $elapsed = round((microtime(true) - $start), 4);
 
         $v = Version::VERSION;
         $ts = date('r', (int) $start);
         $css = "/* compiled by scssphp $v on $ts ({$elapsed}s) */\n\n" . $css;
 
-        $imports = $scss->getParsedFiles();
-
-        $updated = 0;
-        foreach ($imports as $mtime) {
-            $updated = max($updated, $mtime);
+        // scssphp 2.x removed Compiler::getParsedFiles(), use CompilationResult::getIncludedFiles() instead
+        // scssphp 1.x uses Compiler::getParsedFiles() which returns [file => mtime]
+        if (method_exists($scss, 'getParsedFiles')) {
+            // scssphp 1.x
+            $imports = $scss->getParsedFiles();
+            $updated = 0;
+            foreach ($imports as $mtime) {
+                $updated = max($updated, $mtime);
+            }
+        } else {
+            // scssphp 2.x: getIncludedFiles() returns file paths only
+            $includedFiles = $result->getIncludedFiles();
+            $imports = array();
+            $updated = 0;
+            foreach ($includedFiles as $file) {
+                $mtime = filemtime($file);
+                $imports[$file] = $mtime;
+                $updated = max($updated, $mtime);
+            }
         }
 
         return array(
