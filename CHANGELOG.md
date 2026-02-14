@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [4.0.2] - 2026-01-22
+## [4.0.2] - 2026-02-14
 
 - Add scssphp 2.x compatibility while maintaining backward compatibility, [#715]
 - Use `CompilationResult::getIncludedFiles()` for scssphp 2.x, fall back to `Compiler::getParsedFiles()` for scssphp 1.x
